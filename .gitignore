@@ -1,0 +1,17 @@
+auto/
+ltxpng/
+__pycache__
+
+*~
+*#*
+
+*.bbl
+*.bcf
+*.blg
+*.xml
+*.pdf
+*.aux
+*.log
+*.out
+
+*.nc
