@@ -23,7 +23,7 @@ if conf.output == "pgf":
         rcParameter = pgf4a4()
     if conf.medium == "a0":
         rcParameter = pgf4a0()
-    if conf.medium == "beamer":
+    if (conf.medium == "beamer") or (conf.medium == "beamer1610"):
         rcParameter = pgf4a4()
     mpl.rcParams.update(rcParameter)
 
@@ -129,7 +129,7 @@ n_blindr = conf.n_right
 n_blindt = conf.n_top
 for movie in conf.mf:
     print("movie: ", conf.mf[movie])
-    fig, ax = plt.subplots(*conf.subplots, figsize=hxw)
+    fig, ax = plt.subplots(*conf.subplots, figsize=hxw, dpi=dpi)
     ax = listify(ax)
     axo = []
     for i, axis in enumerate(conf.mf[movie]):
@@ -175,21 +175,23 @@ for movie in conf.mf:
             axo[j].format_axis()
             for plotter in axo[j].pos:
                 plotter.plot(i)
-        time_text = ax[0].text(0.02, 0.95, 'time = %.1f $[\Omega_i]$' % dos.t[i],
+        time_text = ax[0].text(0.02, 0.98, 'time = %3d $[\Omega_i^{-1}]$' %dos.t[i],
+                               horizontalalignment="left",
+                               verticalalignment="top",
                                transform=ax[0].transAxes)
         return ax, fig
 
     t = t_plot(conf.t_plot, dos.t)
     outfname = os.path.splitext(movie)[0]
     if conf.output == "mp4":
-        anim = animation.FuncAnimation(fig, update, t, interval=20)
+        anim = animation.FuncAnimation(fig, update, t, interval=100)
         filename_video = path+"/"+outfname+".mp4"
         anim.save(filename_video, writer="ffmpeg", dpi=dpi,
                   extra_args=['-vcodec', 'libx264', '-preset',
-                              'veryslow', '-qp', '0'])
+                              'ultrafast', '-qp', '0'])
     elif conf.output == "screen":
         anim = animation.FuncAnimation(fig, update, t,
-                                       interval=20, repeat=False)
+                                       interval=100, repeat=False)
         plt.show()
     elif conf.output == "pgf":
         os.makedirs(os.getcwd()+"/"+outfname, exist_ok=True)

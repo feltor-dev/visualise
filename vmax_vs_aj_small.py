@@ -17,17 +17,21 @@ def pgf4a0line():
         'font.serif': [],
         'font.sans-serif': [],
         'font.monospace': [],
-        'font.size': 20.74,
-        'axes.labelsize': 20.74,
-        'xtick.labelsize': 17.28,
-        'ytick.labelsize': 17.28,
-        'lines.linewidth' : 1.0,
-        'axes.linewidth': 1.25,
-        'xtick.major.size' : 5,
-        'xtick.minor.size' : 2,
-        'xtick.major.width' : 0.8,
-        'xtick.minor.width' : 0.6,
-        'legend.fontsize' : 20.74,
+        'font.size': 6.22,
+        'axes.labelsize': 6.22,
+        'xtick.labelsize': 5.19,
+        'ytick.labelsize': 5.19,
+        'lines.linewidth' : .3,
+        'axes.linewidth': .6,
+        'xtick.major.size' : 3,
+        'xtick.minor.size' : 1,
+        'xtick.major.width' : 0.4,
+        'xtick.minor.width' : 0.3,
+        'ytick.major.size' : 3,
+        'ytick.minor.size' : 1,
+        'ytick.major.width' : 0.4,
+        'ytick.minor.width' : 0.3,
+        'legend.fontsize' : 6.22,
         'pgf.preamble': [
             '\\usepackage{amsmath}',
         ]
@@ -66,10 +70,10 @@ for prefix in prefices:
 
 marker = ["ko", "kD", "kv", "ks", "k^"]
 # raw: a_j : vel_x__max(n_e)
-fig, ax = plt.subplots(figsize=wxh_cm(25))
+fig, ax = plt.subplots(figsize=wxh_cm(7))
 for i, val in enumerate(mu_j):
     ax.plot(a_j, vel_x__max[i], marker[i], markeredgewidth=0.0,
-            label="$\\mu_j = {}$".format(mu_j[i]), zorder=10)
+            label="$\\mu_j = {}$".format(mu_j[i]), zorder=10, markersize=3)
 ax.set_xscale("log")
 
 leg = ax.legend(loc="lower left", numpoints = 1)
@@ -91,10 +95,10 @@ ax.set_yticks(major_yticks)
 ax.yaxis.set_ticks_position('left')
 ax.xaxis.set_ticks_position('bottom')
 for tick in minor_xticks:
-    ax.axvline(tick, linestyle='--', dashes=(5,10), color="gray", linewidth=0.5) # vertical lines
-ax.grid(which="major", linestyle='--', dashes=(5,5), color="gray")
-ax.set_xlabel("$a_z \; [\,]$")
-ax.set_ylabel("$v^x_{max} \; [c_s]$", labelpad=15)
-save_pgf("/home/e3r/oepg_poster2016/scale.pgf")
+    ax.axvline(tick, linestyle='--', dashes=(3,6), color="gray", linewidth=0.2) # vertical lines
+ax.grid(which="major", linestyle='--', dashes=(3,3), color="gray", linewidth=0.2)
+ax.set_xlabel("$a_z \; [\,]$", labelpad=3)
+ax.set_ylabel("$v^x_{max} \; [c_s]$", labelpad=5)
+save_pgf("/home/e3r/oepg_poster2016/handout/scale.pgf")
 
 plt.show()

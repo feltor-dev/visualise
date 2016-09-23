@@ -7,10 +7,21 @@ def pgf4a4():
         'font.serif': [],
         'font.sans-serif': [],
         'font.monospace': [],
-        'font.size': 10,
-        'axes.labelsize': 10,
-        'xtick.labelsize': 8,
-        'ytick.labelsize': 8,
+        'font.size': 6.22,
+        'axes.labelsize': 6.22,
+        'xtick.labelsize': 5.19,
+        'ytick.labelsize': 5.19,
+        'lines.linewidth' : .3,
+        'axes.linewidth': .6,
+        'xtick.major.size' : 3,
+        'xtick.minor.size' : 1,
+        'xtick.major.width' : 0.4,
+        'xtick.minor.width' : 0.3,
+        'ytick.major.size' : 3,
+        'ytick.minor.size' : 1,
+        'ytick.major.width' : 0.4,
+        'ytick.minor.width' : 0.3,
+        'legend.fontsize' : 6.22,
         'pgf.preamble': [
             '\\usepackage{amsmath}',
         ]
@@ -62,6 +73,8 @@ def pgf4beamer():
         'axes.labelsize': 10,
         'xtick.labelsize': 8,
         'ytick.labelsize': 8,
+        'lines.linewidth' : 1.0,
+        'axes.linewidth': 1.25,
         'pgf.preamble': [
             '\\usepackage{amsmath}',
         ]
@@ -70,11 +83,13 @@ def pgf4beamer():
 
 
 media = {
-    "a0":     [2331.98808, 72.27, 600],
-    "a4":     [418.25555, 72.27, 300],
-    "beamer": [269.14662, 72.27, 96],
-    "22z":    [1080, 96, 96],
-    "12.5z":  [1080, 176, 176]
+    "a0":         [2331.98808, 72.27, 600],
+    "a4":         [418.25555, 72.27, 300],
+    "beamer":     [269.14662, 72.27, 96],
+    "beamer1610": [398.3386, 72.27, 283],
+    "22z":        [1080, 96, 96],
+    "12.5z":      [1080, 176, 176],
+    "tab":        [600, 176, 176]
 }
 
 

@@ -7,7 +7,6 @@ import matplotlib.lines as lines
 from netCDF4 import Dataset
 log = logging.getLogger(__name__)
 
-
 class PlotObject:
     def __init__(self, axis, do):
         self.axis = axis
@@ -82,27 +81,28 @@ class AxisObject:
         if self.zoom_flag:
             break_haxis = 0.004
             break_hperp = 0.015
+            clip_offset = 0.002
             dist = 0.01
             line_formatter = dict(color='black', transform=self.axis.transAxes,clip_on=False)
-            yu_x, yu_y = (-spine_offset-break_hperp)*yox, 1+break_haxis+dist
-            yd_x, yd_y = (-spine_offset-break_hperp)*yox, break_haxis
-            xr_x, xr_y = 1+(-break_haxis+dist)*yox, -spine_offset-break_hperp
-            xl_x, xl_y = (-break_haxis-dist)*yox  , -spine_offset-break_hperp
+            yu_x, yu_y = (-spine_offset-break_hperp)*yox, 1+break_haxis+dist+clip_offset
+            yd_x, yd_y = (-spine_offset-break_hperp)*yox, break_haxis-clip_offset
+            xr_x, xr_y = 1+(-break_haxis+dist+clip_offset)*yox, -spine_offset-break_hperp
+            xl_x, xl_y = (-break_haxis-dist-clip_offset)*yox  , -spine_offset-break_hperp
             y00 = lines.Line2D([yd_x, (-spine_offset+break_hperp)*yox],
-                               [yd_y, -break_haxis], **line_formatter)
+                               [yd_y, -break_haxis-clip_offset], **line_formatter)
             y01 = lines.Line2D([(-spine_offset-break_hperp)*yox, (-spine_offset+break_hperp)*yox],
-                               [break_haxis-dist, -break_haxis-dist], **line_formatter)
+                               [break_haxis-dist-clip_offset, -break_haxis-dist-clip_offset], **line_formatter)
             y10 = lines.Line2D([(-spine_offset-break_hperp)*yox, (-spine_offset+break_hperp)*yox],
-                               [1+break_haxis, 1-break_haxis], **line_formatter)
+                               [1+break_haxis+clip_offset, 1-break_haxis+clip_offset], **line_formatter)
             y11 = lines.Line2D([yu_x, (-spine_offset+break_hperp)*yox],
-                               [yu_y, 1-break_haxis+dist], **line_formatter)
-            x00 = lines.Line2D([-break_haxis*yox, break_haxis*yox],
+                               [yu_y, 1-break_haxis+dist+clip_offset], **line_formatter)
+            x00 = lines.Line2D([(-break_haxis-clip_offset)*yox, (break_haxis-clip_offset)*yox],
                                [-spine_offset-break_hperp, -spine_offset+break_hperp], **line_formatter)
-            x01 = lines.Line2D([xl_x, (break_haxis-dist)*yox],
+            x01 = lines.Line2D([xl_x, (break_haxis-dist-clip_offset)*yox],
                                [xl_y, -spine_offset+break_hperp], **line_formatter)
-            x10 = lines.Line2D([1-break_haxis*yox, 1+break_haxis*yox],
+            x10 = lines.Line2D([1+(-break_haxis+clip_offset)*yox, 1+(break_haxis+clip_offset)*yox],
                                [-spine_offset-break_hperp, -spine_offset+break_hperp], **line_formatter)
-            x11 = lines.Line2D([xr_x, 1+(dist+break_haxis)*yox],
+            x11 = lines.Line2D([xr_x, 1+(dist+break_haxis+clip_offset)*yox],
                                [xr_y, -spine_offset+break_hperp], **line_formatter)
             text_offset = 0.005
             htext_formatter = dict( transform=self.axis.transAxes, usetex=True, clip_on=False)
@@ -219,9 +219,6 @@ def ccmap(xedges, xwhite, xcolor_span, xcolor_show, cmap_str, n, rgba_grey):
     return cmap, norm
 
 
-
-
-
 def ccbt(divider, cmap, norm, ticks, label):
     ax = divider.append_axes("top", size='5%', pad=0.1)
     cb = mpl.colorbar.ColorbarBase(ax,
@@ -238,9 +235,11 @@ def ccbt(divider, cmap, norm, ticks, label):
     ax.tick_params(which="both", labelsize=mpl.rcParams["xtick.labelsize"],
                    width=mpl.rcParams["xtick.major.width"],
                    size=mpl.rcParams["xtick.major.size"])
+
+    for i, xtick_relloc in enumerate(ax.xaxis.get_majorticklocs()):
+        if (xtick_relloc < 0.01) or (xtick_relloc > 0.99):
+            ax.xaxis.get_majorticklines()[i*2+1].set_visible(False)
     cb.outline.set_linewidth(.75)
-
-
     return
 
 
@@ -251,7 +250,7 @@ def ccbr(divider, i, cmap, norm, zlevs, addticks, label):
     colors_bg = np.tile(list(cmap(norm(0.))), (len(zlevs), 1))
     cb.add_lines(levels=zlevs, colors=colors_bg, linewidths=7)
     cb.add_lines(levels=zlevs, colors=colors_zlevs, linewidths=5, erase=False)
-    ax.text(0.2, 1.03, label, horizontalalignment='left',
+    ax.text(0.05, 1.03, label, horizontalalignment='left',
             transform=ax.transAxes, usetex=True,
             size=mpl.rcParams['axes.labelsize'])
     ticks = zlevs.tolist()+addticks
